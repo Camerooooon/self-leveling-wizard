@@ -2,6 +2,9 @@
 
 int main(int argc, char *argv[])
 {
-    printf("Hello world!");
+
+    while (1) {
+        printf("Hello world!");
+    }
     return 0;
 }
