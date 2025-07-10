@@ -1,10 +1,10 @@
-#include "core_pins.h"
-#include "pins_arduino.h"
+#include <Arduino.h>
 
 void setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);
 }
+
 
 void loop()
 {
