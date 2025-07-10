@@ -1,5 +1,5 @@
 #include <Arduino.h>
-
+/*
 void setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);
@@ -13,9 +13,9 @@ void loop()
     digitalWrite(LED_BUILTIN, LOW);
     delay(1000);
 }
+*/
 
 
-/*
 #include "HardwareSerial.h"
 #include "usb_serial.h"
 
@@ -39,4 +39,4 @@ void loop() {
         Serial.write(c);
     }
 }
-*/
+
