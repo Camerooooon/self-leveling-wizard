@@ -63,6 +63,13 @@ void loop(void)
   bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
   bno.getEvent(&gravityData, Adafruit_BNO055::VECTOR_GRAVITY);
 
+  printEvent(&orientationData);
+  printEvent(&angVelocityData);
+  printEvent(&linearAccelData);
+  printEvent(&magnetometerData);
+  printEvent(&accelerometerData);
+  printEvent(&gravityData);
+
   int8_t boardTemp = bno.getTemp();
   Serial.println();
   Serial.print(F("temperature: "));
