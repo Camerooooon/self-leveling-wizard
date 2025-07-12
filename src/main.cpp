@@ -120,9 +120,13 @@ void loop(void)
     Serial.print("Gyro x=");
     Serial.print(orientationData.orientation.x);
     Serial.print(" y=");
-    Serial.print(orientationData.orientation.x);
+    Serial.print(orientationData.orientation.y);
     Serial.print(" z=");
-    Serial.print(orientationData.orientation.x);
+    Serial.print(orientationData.orientation.z);
+
+    Serial.print("Gradient");
+    Serial.print("direction of gradient=");
+    Serial.print(atan2(orientationData.orientation.y, orientationData.orientation.x) * 180 / 3.1415926382);
 
 
     delay(SAMPLERATE_DELAY_MS);
