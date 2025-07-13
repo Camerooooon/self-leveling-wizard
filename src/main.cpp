@@ -95,20 +95,22 @@ void set_position(int32_t commanded_position_degrees) {
 
     int32_t commanded_position = commanded_position_degrees * 10000;
 
-    uint8_t to_write[100] = {0};
+    uint8_t to_write[10] = {0};
 
     to_write[0] = 0xAA; // Frame identifier
     to_write[1] = 1 + 4; // Data length
     to_write[2] = COMM_SET_POS; // Data identifier
     
-    to_write[3] = ((commanded_position >> 24) & 0xFF); // bits 25–32
-    to_write[4] = ((commanded_position >> 16) & 0xFF); // bits 17–24
-    to_write[5] = ((commanded_position >> 8)  & 0xFF); // bits 9–16
-    to_write[6] = (commanded_position & 0xFF); // bits 1-8
+    to_write[3] = ((commanded_position >> 24)); // bits 25–32
+    to_write[4] = ((commanded_position >> 16)); // bits 17–24
+    to_write[5] = ((commanded_position >> 8)); // bits 9–16
+    to_write[6] = (commanded_position); // bits 1-8
     // printf("%04x", calculate_checksum(to_write + 2, 5));
+    //
 
-    to_write[7] = calculate_checksum(to_write + 2, 5) >> 8;
-    to_write[8] = calculate_checksum(to_write + 2, 5) & 0xFF;
+    uint16_t crc = calculate_checksum(to_write + 2, 5);  // CRC over command + data
+    to_write[7] = (crc >> 8) & 0xFF;
+    to_write[8] = crc & 0xFF;
 
     to_write[9] = 0xBB;
 
