@@ -105,12 +105,12 @@ void set_position(int32_t commanded_position_degrees) {
 
     to_write[9] = 0x03;
 
-    // printf("Sending: ");
+    Serial.print("Sending: ");
     for (int i = 0; i<10; i++) {
-        // printf("%02x ", to_write[i]);
+        Serial.printf("%02x ", to_write[i]);
         Serial1.print(to_write[i]); // Send command to motor via serial
     }
-    // printf("\n");
+    Serial.print("\n");
 
 
 
