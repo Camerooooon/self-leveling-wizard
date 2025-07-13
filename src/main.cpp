@@ -1,5 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_BNO055.h>
+#include <cmath>
+#include <cstdlib>
 #include <utility/imumaths.h>
 
 const unsigned short crc16_tab[] = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084,
@@ -112,14 +114,12 @@ void set_position(int32_t commanded_position_degrees) {
 
     Serial1.write(to_write, sizeof(to_write));
 
-
     // Serial.print("Sending: ");
     // for (int i = 0; i<11; i++) {
     //     Serial.printf("%02x ", to_write[i]);
     //     Serial1.write(to_write[i]); // Send command to motor via serial
     // }
     // Serial.print("\n");
-
 
 
 }
@@ -136,17 +136,19 @@ void loop(void)
     bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
     bno.getEvent(&gravityData, Adafruit_BNO055::VECTOR_GRAVITY);
 
-    // Serial.println();
-    // Serial.print("Gyro x=");
-    // Serial.print(orientationData.orientation.x);
-    // Serial.print(" y=");
-    // Serial.print(orientationData.orientation.y);
-    // Serial.print(" z=");
-    // Serial.print(orientationData.orientation.z);
-    //
-    // Serial.print("Gradient");
-    // Serial.print("direction of gradient=");
-    // Serial.print(atan2(orientationData.orientation.y, orientationData.orientation.z) * 180 / 3.1415926382);
+    Serial.println();
+    Serial.print("Gyro x=");
+    Serial.print(orientationData.orientation.x);
+    Serial.print(" y=");
+    Serial.print(orientationData.orientation.y);
+    Serial.print(" z=");
+    Serial.print(orientationData.orientation.z);
+
+    Serial.print("Gradient");
+    Serial.print("direction of gradient=");
+    float desired_orientation = atan2(orientationData.orientation.y, orientationData.orientation.z) * 180 / 3.1415926382;
+    Serial.print(desired_orientation);
+
 
     // Writing orientation code
     
@@ -156,17 +158,19 @@ void loop(void)
 
     if (enabled_motor == true) {
         Serial.print("motor is active!");
-        set_position(0);
+        if (abs(orientationData.orientation.y) > 10 && abs(orientationData.orientation.z) > 10) {
+            set_position(round(desired_orientation));
+        }
         // get_temperature();
     }
 
-    while (Serial1.available()) {
-        uint8_t b = Serial1.read();
-        if (b == 0x03) {
-            Serial.printf("\n");
-        }
-        Serial.printf("%02X ", b);
-    }
+    // while (Serial1.available()) {
+    //     uint8_t b = Serial1.read();
+    //     if (b == 0x03) {
+    //         Serial.printf("\n");
+    //     }
+    //     Serial.printf("%02X ", b);
+    // }
 
 
 
