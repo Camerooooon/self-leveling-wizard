@@ -146,7 +146,7 @@ void loop(void)
 
     Serial.print("Gradient");
     Serial.print("direction of gradient=");
-    float desired_orientation = atan2(orientationData.orientation.y, orientationData.orientation.z) * 180 / 3.1415926382;
+    int desired_orientation = atan2(orientationData.orientation.y, orientationData.orientation.z) * 180 / 3.1415926382;
     Serial.print(desired_orientation);
 
 
@@ -158,12 +158,11 @@ void loop(void)
 
     if (enabled_motor == true) {
         Serial.print("motor is active!");
-        set_position(90);
-        // if (abs(orientationData.orientation.y) > 10 || abs(orientationData.orientation.z) > 10) {
-        //     Serial.print("commanding position");
-        //     set_position(round(desired_orientation));
-        // }
-        // get_temperature();
+        if (abs(orientationData.orientation.y) > 10 || abs(orientationData.orientation.z) > 10) {
+            Serial.print("commanding position");
+            set_position(desired_orientation);
+        }
+        get_temperature();
     }
 
     // while (Serial1.available()) {
