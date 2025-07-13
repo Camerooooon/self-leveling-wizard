@@ -159,6 +159,7 @@ void loop(void)
     if (enabled_motor == true) {
         Serial.print("motor is active!");
         if (abs(orientationData.orientation.y) > 10 && abs(orientationData.orientation.z) > 10) {
+            Serial.print("commanding position");
             set_position(round(desired_orientation));
         }
         // get_temperature();
