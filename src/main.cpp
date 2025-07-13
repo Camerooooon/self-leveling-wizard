@@ -156,8 +156,8 @@ void loop(void)
 
     if (enabled_motor == true) {
         Serial.print("motor is active!");
-        // set_position(0);
-        get_temperature();
+        set_position(0);
+        // get_temperature();
     }
 
     while (Serial1.available()) {
