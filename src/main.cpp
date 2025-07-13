@@ -55,13 +55,14 @@ typedef enum {
 } COMM_PACKET_ID;
 
 uint16_t SAMPLERATE_DELAY_MS = 100;
+long MOTOR_SERIAL_BAUD_RATE = 19200;
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
 void setup(void)
 {
     Serial.begin(115200);
-    Serial1.begin(19200, SERIAL_8N1);
+    Serial1.begin(MOTOR_SERIAL_BAUD_RATE, SERIAL_8N1);
 
     while (!Serial) delay(10);
 
