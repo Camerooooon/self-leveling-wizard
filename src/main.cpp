@@ -33,25 +33,25 @@ const unsigned short crc16_tab[] = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084,
     0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0 };
 
 typedef enum {
-    COMM_FW_VERSION = 0,
-    COMM_JUMP_TO_BOOTLOADER,
-    COMM_ERASE_NEW_APP,
-    COMM_WRITE_NEW_APP_DATA,
-    COMM_GET_VALUES, // Get motor operating parameters
-    COMM_SET_DUTY, // Motor operates in duty cycle mode
-    COMM_SET_CURRENT, // Motor operates in current loop mode
-    COMM_SET_CURRENT_BRAKE, // Motor operates in current brake mode
-    COMM_SET_RPM, // Motor operates in speed loop mode
-    COMM_SET_POS, // Motor operates in position loop mode
-    COMM_SET_HANDBRAKE, // Motor operates in handbrake current loop mode
-    COMM_SET_DETECT, // Motor real-time feedback current position command
-    COMM_ROTOR_POSITION=22,// Motor feedback current position
-    COMM_GET_VALUES_SETUP=50 , // Motor single or multiple parameter acquisition command
-    COMM_SET_POS_SPD=91, // Motor operates in position-speed loop mode
-    COMM_SET_POS_MULTI=92, // Set motor motion to single-turn mode
-    COMM_SET_POS_SINGLE=93, // Set motor motion to multi-turn mode, range ±100 turns
-    COMM_SET_POS_UNLIMITED=94, // Reserved
-    COMM_SET_POS_ORIGIN=95, // Set motor origin
+    COMM_FW_VERSION = 65,
+    COMM_JUMP_TO_BOOTLOADER=66,
+    COMM_ERASE_NEW_APP=67,
+    COMM_WRITE_NEW_APP_DATA=68,
+    COMM_GET_VALUES=69, //Get motor operating parameters
+    COMM_SET_DUTY=70, //The motor operates in duty cycle mode
+    COMM_SET_CURRENT=71, //The motor operates in current loop mode
+    COMM_SET_CURRENT_BRAKE=72, //The motor operates in current bake mode
+    COMM_SET_RPM=73, //The motor operates in velocity loop mode
+    COMM_SET_POS=74, //The motor operates in position loop mode
+    COMM_SET_HANDBRAKE=75, //The motor operates om handbrake current loop mode
+    COMM_SET_DETECT=76, //The motor provides real-time feedback on the current
+    COMM_ROTOR_POSITION=87,//The motor feedbacks the current position
+    COMM_GET_VALUES_SETUP=16,//The motor requires instructions based on one or more
+    COMM_SET_POS_SPD=60, // The motor operates in position-velocity loop mode
+    COMM_SET_POS_MULTI=61, //Set the motor movement to single circle motion mode
+    COMM_SET_POS_SINGLE=62, // Set the motor movement to multiple circles motion mode,
+    COMM_SET_POS_UNLIMITED=63, //Save
+    COMM_SET_POS_ORIGIN=64, //Set the motor’s origin
 } COMM_PACKET_ID;
 
 uint16_t SAMPLERATE_DELAY_MS = 100;
@@ -94,7 +94,7 @@ void set_position(int32_t commanded_position_degrees) {
 
     uint8_t to_write[100] = {0};
 
-    to_write[0] = 0x02; // Frame identifier
+    to_write[0] = 0xAA; // Frame identifier
     to_write[1] = 1 + 4; // Data length
     to_write[2] = COMM_SET_POS; // Data identifier
     
@@ -107,7 +107,7 @@ void set_position(int32_t commanded_position_degrees) {
     to_write[7] = calculate_checksum(to_write + 2, 5) >> 8;
     to_write[8] = calculate_checksum(to_write + 2, 5) & 0xFF;
 
-    to_write[9] = 0x03;
+    to_write[9] = 0xBB;
 
     Serial1.write(to_write, sizeof(to_write));
 
