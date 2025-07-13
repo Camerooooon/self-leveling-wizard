@@ -148,6 +148,7 @@ void loop(void)
 
     if (enabled_motor == true) {
         Serial.print("motor is active!");
+        set_position(0);
     }
 
 
