@@ -84,9 +84,17 @@ uint16_t calculate_checksum(unsigned char *buf, unsigned int len) {
     return cksum;
 }
 
+void get_temperature() {
+    uint8_t to_write[] = {0x02, 0x05, 0x32, 0x00, 0x00, 0x00, 0x01, 0x58, 0x4C, 0x03, 0 };
+    Serial1.write(*to_write);
+    while (Serial1.available() > 0) {
+        Serial.print(Serial1.read());
+    }
+}
+
 void set_position(int32_t commanded_position_degrees) {
 
-    int32_t commanded_position = commanded_position_degrees * 1000000;
+    int32_t commanded_position = commanded_position_degrees * 10000;
 
     uint8_t to_write[100] = {0};
 
@@ -107,7 +115,7 @@ void set_position(int32_t commanded_position_degrees) {
 
     Serial1.write(*to_write);
 
-    while (Serial1.available()) {
+    while (Serial1.available() > 0) {
         Serial.print(Serial1.read());
     }
 
@@ -154,7 +162,8 @@ void loop(void)
 
     if (enabled_motor == true) {
         Serial.print("motor is active!");
-        set_position(0);
+        // set_position(0);
+        get_temperature();
     }
 
 
