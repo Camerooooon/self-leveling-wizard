@@ -85,7 +85,7 @@ uint16_t calculate_checksum(unsigned char *buf, unsigned int len) {
 }
 
 void get_temperature() {
-    uint8_t to_write[] = {0x02, 0x05, 0x32, 0x00, 0x00, 0x00, 0x01, 0x58, 0x4C, 0x03 };
+    uint8_t to_write[] = {0x02, 0x01, 0x04, 0x40, 0x84, 0x03 };
     Serial1.write(to_write, sizeof(to_write));
 }
 
