@@ -126,7 +126,7 @@ void loop(void)
 
     Serial.print("Gradient");
     Serial.print("direction of gradient=");
-    Serial.print(atan2(orientationData.orientation.y, orientationData.orientation.x) * 180 / 3.1415926382);
+    Serial.print(atan2(orientationData.orientation.y, orientationData.orientation.z) * 180 / 3.1415926382);
 
 
     delay(SAMPLERATE_DELAY_MS);
