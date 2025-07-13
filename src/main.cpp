@@ -163,11 +163,8 @@ void loop(void)
         get_temperature();
     }
 
-    if (Serial1.available()) {
-        uint8_t incoming = Serial1.read();
-        Serial.print("Received: 0x");
-        if (incoming < 0x10) Serial.print("0");
-        Serial.println(incoming, HEX);
+    while (Serial1.available() > 0) {
+        Serial.printf("%02x", Serial1.read());
     }
 
 
