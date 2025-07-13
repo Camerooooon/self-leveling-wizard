@@ -62,7 +62,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 void setup(void)
 {
     Serial.begin(115200);
-    Serial1.begin(MOTOR_SERIAL_BAUD_RATE);
+    Serial1.begin(MOTOR_SERIAL_BAUD_RATE, SERIAL_8N1);
 
     while (!Serial) delay(10);
 
@@ -112,9 +112,6 @@ void set_position(int32_t commanded_position_degrees) {
 
     Serial1.write(*to_write);
 
-    while (Serial1.available() > 0) {
-        Serial.printf("%02x", Serial1.read());
-    }
 
     // Serial.print("Sending: ");
     // for (int i = 0; i<11; i++) {
@@ -163,8 +160,9 @@ void loop(void)
         get_temperature();
     }
 
-    while (Serial1.available() > 0) {
-        Serial.printf("%02x", Serial1.read());
+    while (Serial1.available()) {
+        uint8_t b = Serial1.read();
+        Serial.printf("%02X ", b);
     }
 
 
