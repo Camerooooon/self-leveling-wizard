@@ -116,6 +116,8 @@ void set_position(int32_t commanded_position_degrees) {
 
 }
 
+bool estop_triggered = false;
+
 void loop(void)
 {
     sensors_event_t orientationData , angVelocityData , linearAccelData, magnetometerData, accelerometerData, gravityData;
@@ -139,6 +141,15 @@ void loop(void)
     Serial.print(atan2(orientationData.orientation.y, orientationData.orientation.z) * 180 / 3.1415926382);
 
     // Writing orientation code
+    
+    if (Serial.read() == ' ') {
+        estop_triggered = true;
+    }
+
+    if (estop_triggered == true) {
+        Serial.print("estop was triggered!");
+    }
+
 
 
 
