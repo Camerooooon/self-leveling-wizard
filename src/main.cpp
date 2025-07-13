@@ -136,17 +136,17 @@ void loop(void)
     bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
     bno.getEvent(&gravityData, Adafruit_BNO055::VECTOR_GRAVITY);
 
-    Serial.println();
-    Serial.print("Gyro x=");
-    Serial.print(orientationData.orientation.x);
-    Serial.print(" y=");
-    Serial.print(orientationData.orientation.y);
-    Serial.print(" z=");
-    Serial.print(orientationData.orientation.z);
-
-    Serial.print("Gradient");
-    Serial.print("direction of gradient=");
-    Serial.print(atan2(orientationData.orientation.y, orientationData.orientation.z) * 180 / 3.1415926382);
+    // Serial.println();
+    // Serial.print("Gyro x=");
+    // Serial.print(orientationData.orientation.x);
+    // Serial.print(" y=");
+    // Serial.print(orientationData.orientation.y);
+    // Serial.print(" z=");
+    // Serial.print(orientationData.orientation.z);
+    //
+    // Serial.print("Gradient");
+    // Serial.print("direction of gradient=");
+    // Serial.print(atan2(orientationData.orientation.y, orientationData.orientation.z) * 180 / 3.1415926382);
 
     // Writing orientation code
     
@@ -162,6 +162,9 @@ void loop(void)
 
     while (Serial1.available()) {
         uint8_t b = Serial1.read();
+        if (b == 0x03) {
+            Serial.printf("\n");
+        }
         Serial.printf("%02X ", b);
     }
 
