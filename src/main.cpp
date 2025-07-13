@@ -87,9 +87,6 @@ uint16_t calculate_checksum(unsigned char *buf, unsigned int len) {
 void get_temperature() {
     uint8_t to_write[] = {0x02, 0x05, 0x32, 0x00, 0x00, 0x00, 0x01, 0x58, 0x4C, 0x03 };
     Serial1.write(to_write, sizeof(to_write));
-    while (Serial1.available() > 0) {
-        Serial.print(Serial1.read());
-    }
 }
 
 void set_position(int32_t commanded_position_degrees) {
@@ -164,6 +161,13 @@ void loop(void)
         Serial.print("motor is active!");
         // set_position(0);
         get_temperature();
+    }
+
+    if (Serial1.available()) {
+        uint8_t incoming = Serial1.read();
+        Serial.print("Received: 0x");
+        if (incoming < 0x10) Serial.print("0");
+        Serial.println(incoming, HEX);
     }
 
 
