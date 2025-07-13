@@ -116,7 +116,7 @@ void set_position(int32_t commanded_position_degrees) {
 
 }
 
-bool estop_triggered = false;
+bool enabled_motor = false;
 
 void loop(void)
 {
@@ -143,11 +143,11 @@ void loop(void)
     // Writing orientation code
     
     if (Serial.read() == ' ') {
-        estop_triggered = true;
+        enabled_motor = !enabled_motor;
     }
 
-    if (estop_triggered == true) {
-        Serial.print("estop was triggered!");
+    if (enabled_motor == true) {
+        Serial.print("motor is active!");
     }
 
 
