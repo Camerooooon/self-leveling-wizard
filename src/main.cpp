@@ -110,7 +110,7 @@ void set_position(int32_t commanded_position_degrees) {
 
     to_write[9] = 0x03;
 
-    Serial1.write(*to_write);
+    Serial1.write(to_write, sizeof(to_write));
 
 
     // Serial.print("Sending: ");
