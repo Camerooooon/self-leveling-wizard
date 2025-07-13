@@ -105,12 +105,14 @@ void set_position(int32_t commanded_position_degrees) {
 
     to_write[9] = 0x03;
 
-    Serial.print("Sending: ");
-    for (int i = 0; i<10; i++) {
-        Serial.printf("%02x ", to_write[i]);
-        Serial1.write(to_write[i]); // Send command to motor via serial
-    }
-    Serial.print("\n");
+    Serial1.write(*to_write);
+
+    // Serial.print("Sending: ");
+    // for (int i = 0; i<11; i++) {
+    //     Serial.printf("%02x ", to_write[i]);
+    //     Serial1.write(to_write[i]); // Send command to motor via serial
+    // }
+    // Serial.print("\n");
 
 
 
