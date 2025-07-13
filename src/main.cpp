@@ -93,7 +93,7 @@ void get_temperature() {
 
 void set_position(int32_t commanded_position_degrees) {
 
-    int32_t commanded_position = commanded_position_degrees * 10000;
+    int32_t commanded_position = commanded_position_degrees * 1000000;
 
     uint8_t to_write[10] = {0};
 
