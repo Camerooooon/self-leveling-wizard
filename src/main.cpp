@@ -67,7 +67,7 @@ int32_t ERPM_TO_SPEED = 10;
 int32_t MAX_SPEED_ERPM = 8000;
 int32_t MAX_ACCELERATION_ERPM_PER_SECOND_SQRD = 9000;
 
-int32_t DEGREES_OFFSET = 9;
+float DEGREES_OFFSET = 9;
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
@@ -101,7 +101,7 @@ void get_temperature() {
     Serial1.write(to_write, sizeof(to_write));
 }
 
-void set_position(int32_t commanded_position_degrees) {
+void set_position(float commanded_position_degrees) {
 
     int32_t commanded_position = (commanded_position_degrees + DEGREES_OFFSET) * DEGREES_TO_ENCODER_TICKS;
     int32_t commanded_speed = MAX_SPEED_ERPM;
@@ -131,7 +131,7 @@ void set_position(int32_t commanded_position_degrees) {
     uint16_t crc = calculate_checksum(to_write + 2, 1+4+4+4);  // CRC over command + data
     
     to_write[15] = (crc >> 8) & 0xFF;
-    to_write[16] = crc & 0xFF;
+    to_write[16] = carc & 0xFF;
 
     to_write[17] = 0xBB;
 
@@ -169,7 +169,7 @@ void loop(void)
 
     Serial.print("Gradient");
     Serial.print("direction of gradient=");
-    int desired_orientation = atan2(orientationData.orientation.y, orientationData.orientation.z) * 180 / 3.1415926382;
+    float desired_orientation = atan2(orientationData.orientation.y, orientationData.orientation.z) * (180.0 / 3.14159);
     Serial.print(desired_orientation);
 
 
