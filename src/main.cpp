@@ -60,10 +60,10 @@ uint16_t SAMPLERATE_DELAY_MS = 100;
 long MOTOR_SERIAL_BAUD_RATE = 19200;
 
 int32_t DEGREES_TO_ENCODER_TICKS = 1000000;
-int16_t ERPM_TO_SPEED = 10;
+int32_t ERPM_TO_SPEED = 10;
 
-int16_t MAX_SPEED_ERPM = 11000 / 4;
-int16_t MAX_ACCELERATION_ERPM_PER_SECOND_SQRD = 2000;
+int32_t MAX_SPEED_ERPM = 11000 / 4;
+int32_t MAX_ACCELERATION_ERPM_PER_SECOND_SQRD = 2000;
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
@@ -100,10 +100,10 @@ void get_temperature() {
 void set_position(int32_t commanded_position_degrees) {
 
     int32_t commanded_position = commanded_position_degrees * DEGREES_TO_ENCODER_TICKS;
-    int16_t commanded_speed = MAX_SPEED_ERPM / ERPM_TO_SPEED;
-    int16_t commanded_acceleration = MAX_ACCELERATION_ERPM_PER_SECOND_SQRD / ERPM_TO_SPEED;
+    int32_t commanded_speed = MAX_SPEED_ERPM;
+    int32_t commanded_acceleration = MAX_ACCELERATION_ERPM_PER_SECOND_SQRD;
 
-    uint8_t to_write[14] = {0};
+    uint8_t to_write[18] = {0};
 
     to_write[0] = 0xAA; // Frame identifier
     to_write[1] = 1 + 4; // Data length
@@ -114,18 +114,22 @@ void set_position(int32_t commanded_position_degrees) {
     to_write[5] = ((commanded_position >> 8)); // bits 9–16
     to_write[6] = (commanded_position); // bits 1-8
     
-    to_write[7] = (commanded_speed >> 8) & 0xFF;
-    to_write[8] = commanded_speed & 0xFF;
+    to_write[7] = (commanded_speed >> 24) & 0xFF;
+    to_write[8] = (commanded_speed >> 16) & 0xFF;
+    to_write[9] = (commanded_speed >> 8) & 0xFF;
+    to_write[10] = commanded_speed & 0xFF;
 
-    to_write[9] = (commanded_acceleration >> 8) & 0xFF;
-    to_write[10] = commanded_acceleration & 0xFF;
+    to_write[11] = (commanded_acceleration >> 24) & 0xFF;
+    to_write[12] = (commanded_acceleration >> 16) & 0xFF;
+    to_write[13] = (commanded_acceleration >> 8) & 0xFF;
+    to_write[14] = commanded_acceleration & 0xFF;
     
     uint16_t crc = calculate_checksum(to_write + 2, 9);  // CRC over command + data
     
-    to_write[11] = (crc >> 8) & 0xFF;
-    to_write[12] = crc & 0xFF;
+    to_write[15] = (crc >> 8) & 0xFF;
+    to_write[16] = crc & 0xFF;
 
-    to_write[13] = 0xBB;
+    to_write[17] = 0xBB;
 
     Serial1.write(to_write, sizeof(to_write));
 
