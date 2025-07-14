@@ -72,13 +72,17 @@ float DEGREES_OFFSET = 0; // negative is counter clockwise
 
 float FAULT_DEGREES = 60;
 
+// #define DEBUG
+
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
 bool enabled_motor = false;
 
 void setup(void)
 {
+    #ifdef DEBUG
     Serial.begin(115200);
+    #endif
     Serial1.begin(MOTOR_SERIAL_BAUD_RATE, SERIAL_8N1);
 
     while (!Serial) delay(10);
