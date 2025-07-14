@@ -106,7 +106,7 @@ void set_position(int32_t commanded_position_degrees) {
     uint8_t to_write[18] = {0};
 
     to_write[0] = 0xAA; // Frame identifier
-    to_write[1] = 1 + 4; // Data length
+    to_write[1] = 1 + 4 + 4 + 4; // Data length
     to_write[2] = COMM_SET_POS_SPD; // Data identifier
     
     to_write[3] = ((commanded_position >> 24)); // bits 25–32
@@ -124,7 +124,7 @@ void set_position(int32_t commanded_position_degrees) {
     to_write[13] = (commanded_acceleration >> 8) & 0xFF;
     to_write[14] = commanded_acceleration & 0xFF;
     
-    uint16_t crc = calculate_checksum(to_write + 2, 9);  // CRC over command + data
+    uint16_t crc = calculate_checksum(to_write + 2, 1+4+4+4);  // CRC over command + data
     
     to_write[15] = (crc >> 8) & 0xFF;
     to_write[16] = crc & 0xFF;
