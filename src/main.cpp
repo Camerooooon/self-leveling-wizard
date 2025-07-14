@@ -56,6 +56,8 @@ typedef enum {
     COMM_SET_POS_ORIGIN=64, //Set the motor’s origin
 } COMM_PACKET_ID;
 
+int32_t DEADZONE = 6;
+
 uint16_t SAMPLERATE_DELAY_MS = 100;
 long MOTOR_SERIAL_BAUD_RATE = 19200;
 
@@ -177,7 +179,7 @@ void loop(void)
 
     if (enabled_motor == true) {
         Serial.print("motor is active!");
-        if (abs(orientationData.orientation.y) > 10 || abs(orientationData.orientation.z) > 10) {
+        if (abs(orientationData.orientation.y) > DEADZONE || abs(orientationData.orientation.z) > DEADZONE) {
             Serial.print("commanding position");
             set_position(desired_orientation);
         }
