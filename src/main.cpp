@@ -62,7 +62,7 @@ long MOTOR_SERIAL_BAUD_RATE = 19200;
 int32_t DEGREES_TO_ENCODER_TICKS = 1000000;
 int16_t ERPM_TO_SPEED = 10;
 
-int16_t MAX_SPEED_ERPM = 11000;
+int16_t MAX_SPEED_ERPM = 11000 / 4;
 int16_t MAX_ACCELERATION_ERPM_PER_SECOND_SQRD = 2000;
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
@@ -121,6 +121,7 @@ void set_position(int32_t commanded_position_degrees) {
     to_write[10] = commanded_acceleration & 0xFF;
     
     uint16_t crc = calculate_checksum(to_write + 2, 9);  // CRC over command + data
+    
     to_write[11] = (crc >> 8) & 0xFF;
     to_write[12] = crc & 0xFF;
 
