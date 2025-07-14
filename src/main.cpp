@@ -1,3 +1,4 @@
+#include "core_pins.h"
 #include <Wire.h>
 #include <Adafruit_BNO055.h>
 #include <cmath>
@@ -73,6 +74,8 @@ float FAULT_DEGREES = 60;
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
+bool enabled_motor = false;
+
 void setup(void)
 {
     Serial.begin(115200);
@@ -86,7 +89,10 @@ void setup(void)
         while (1);
     }
 
-    delay(1000);
+    delay(5000);
+
+    enabled_motor = true;
+
 }
 
 uint16_t calculate_checksum(unsigned char *buf, unsigned int len) {
@@ -146,10 +152,8 @@ void set_position(float commanded_position_degrees) {
     }
     Serial.print("\n");
 
-
 }
 
-bool enabled_motor = true;
 
 void loop(void)
 {
