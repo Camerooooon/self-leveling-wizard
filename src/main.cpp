@@ -91,8 +91,6 @@ void setup(void)
     Serial.begin(115200);
     Serial1.begin(MOTOR_SERIAL_BAUD_RATE, SERIAL_8N1);
 
-    while (!Serial) delay(10);
-
     if (!bno.begin())
     {
         print_debug("no BNO055 detected");
