@@ -68,7 +68,7 @@ int32_t ERPM_TO_SPEED = 10;
 int32_t MAX_SPEED_ERPM = 13000;
 int32_t MAX_ACCELERATION_ERPM_PER_SECOND_SQRD = 14000;
 
-float DEGREES_OFFSET = -123; // negative is counter clockwise
+float DEGREES_OFFSET = 0; // negative is counter clockwise
 
 float FAULT_DEGREES = 60;
 
