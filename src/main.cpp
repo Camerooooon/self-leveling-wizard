@@ -67,6 +67,8 @@ int32_t ERPM_TO_SPEED = 10;
 int32_t MAX_SPEED_ERPM = 11000 / 2;
 int32_t MAX_ACCELERATION_ERPM_PER_SECOND_SQRD = 9000;
 
+int32_t DEGREES_OFFSET = 9;
+
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
 void setup(void)
@@ -101,7 +103,7 @@ void get_temperature() {
 
 void set_position(int32_t commanded_position_degrees) {
 
-    int32_t commanded_position = commanded_position_degrees * DEGREES_TO_ENCODER_TICKS;
+    int32_t commanded_position = (commanded_position_degrees + DEGREES_OFFSET) * DEGREES_TO_ENCODER_TICKS;
     int32_t commanded_speed = MAX_SPEED_ERPM;
     int32_t commanded_acceleration = MAX_ACCELERATION_ERPM_PER_SECOND_SQRD;
 
