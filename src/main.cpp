@@ -69,6 +69,8 @@ int32_t MAX_ACCELERATION_ERPM_PER_SECOND_SQRD = 14000;
 
 float DEGREES_OFFSET = -94; // negative is clockwise
 
+float FAULT_DEGREES = 60;
+
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
 void setup(void)
@@ -147,7 +149,7 @@ void set_position(float commanded_position_degrees) {
 
 }
 
-bool enabled_motor = false;
+bool enabled_motor = true;
 
 void loop(void)
 {
@@ -172,6 +174,10 @@ void loop(void)
     float desired_orientation = atan2(orientationData.orientation.y, orientationData.orientation.z) * (180.0 / 3.14159);
     Serial.print(desired_orientation);
 
+    if (abs(orientationData.orientation.y) > FAULT_DEGREES || abs(orientationData.orientation.z) > FAULT_DEGREES) {
+        Serial.print("faulting. max angle !!!!!!!!!!!!!!!!!!!!!");
+        enabled_motor = false;
+    }
 
     // Writing orientation code
     
