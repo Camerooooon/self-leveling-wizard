@@ -131,7 +131,7 @@ void set_position(float commanded_position_degrees) {
     uint16_t crc = calculate_checksum(to_write + 2, 1+4+4+4);  // CRC over command + data
     
     to_write[15] = (crc >> 8) & 0xFF;
-    to_write[16] = carc & 0xFF;
+    to_write[16] = crc & 0xFF;
 
     to_write[17] = 0xBB;
 
