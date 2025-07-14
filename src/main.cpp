@@ -72,24 +72,30 @@ float DEGREES_OFFSET = 0; // negative is counter clockwise
 
 float FAULT_DEGREES = 60;
 
-// #define DEBUG
+#define DEBUG
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
 bool enabled_motor = false;
 
+void print_debug(const String& msg) {
+    if (Serial && Serial.availableForWrite()) {
+        #ifdef DEBUG
+        Serial.print(msg);
+        #endif
+    }
+}
+
 void setup(void)
 {
-    #ifdef DEBUG
     Serial.begin(115200);
-    #endif
     Serial1.begin(MOTOR_SERIAL_BAUD_RATE, SERIAL_8N1);
 
     while (!Serial) delay(10);
 
     if (!bno.begin())
     {
-        Serial.print("no BNO055 detected");
+        print_debug("no BNO055 detected");
         while (1);
     }
 
@@ -149,12 +155,14 @@ void set_position(float commanded_position_degrees) {
 
     Serial1.write(to_write, sizeof(to_write));
 
-    Serial.print("Sending: ");
+    print_debug("Sending: ");
     for (int i = 0; i<14; i++) {
-        Serial.printf("%02x ", to_write[i]);
+        if (Serial && Serial.availableForWrite()) {
+            Serial.printf("%02x ", to_write[i]);
+        }
         // Serial1.write(to_write[i]); // Send command to motor via serial
     }
-    Serial.print("\n");
+    print_debug("\n");
 
 }
 
@@ -169,21 +177,21 @@ void loop(void)
     bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
     bno.getEvent(&gravityData, Adafruit_BNO055::VECTOR_GRAVITY);
 
-    Serial.println();
-    Serial.print("Gyro x=");
-    Serial.print(orientationData.orientation.x);
-    Serial.print(" y=");
-    Serial.print(orientationData.orientation.y);
-    Serial.print(" z=");
-    Serial.print(orientationData.orientation.z);
+    print_debug('\n');
+    print_debug("Gyro x=");
+    print_debug(orientationData.orientation.x);
+    print_debug(" y=");
+    print_debug(orientationData.orientation.y);
+    print_debug(" z=");
+    print_debug(orientationData.orientation.z);
 
-    Serial.print("Gradient");
-    Serial.print("direction of gradient=");
+    print_debug("Gradient");
+    print_debug("direction of gradient=");
     float desired_orientation = atan2(orientationData.orientation.y, orientationData.orientation.z) * (180.0 / 3.14159);
-    Serial.print(desired_orientation);
+    print_debug(desired_orientation);
 
     if (abs(orientationData.orientation.y) > FAULT_DEGREES || abs(orientationData.orientation.z) > FAULT_DEGREES) {
-        Serial.print("faulting. max angle !!!!!!!!!!!!!!!!!!!!!");
+        print_debug("faulting. max angle !!!!!!!!!!!!!!!!!!!!!");
         enabled_motor = false;
     }
 
@@ -194,9 +202,9 @@ void loop(void)
     }
 
     if (enabled_motor == true) {
-        Serial.print("motor is active!");
+        print_debug("motor is active!");
         if (abs(orientationData.orientation.y) > DEADZONE || abs(orientationData.orientation.z) > DEADZONE) {
-            Serial.print("commanding position");
+            print_debug("commanding position");
             set_position(desired_orientation);
         }
         get_temperature();
@@ -205,9 +213,9 @@ void loop(void)
     // while (Serial1.available()) {
     //     uint8_t b = Serial1.read();
     //     if (b == 0x03) {
-    //         Serial.printf("\n");
+    //         print_debugf("\n");
     //     }
-    //     Serial.printf("%02X ", b);
+    //     print_debugf("%02X ", b);
     // }
 
 
