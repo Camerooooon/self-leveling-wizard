@@ -67,7 +67,7 @@ int32_t ERPM_TO_SPEED = 10;
 int32_t MAX_SPEED_ERPM = 13000;
 int32_t MAX_ACCELERATION_ERPM_PER_SECOND_SQRD = 14000;
 
-float DEGREES_OFFSET = -94; // negative is clockwise
+float DEGREES_OFFSET = -123; // negative is counter clockwise
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
